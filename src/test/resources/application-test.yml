@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    driver-class-name: "org.postgresql.Driver"
+    url: "jdbc:postgresql://localhost:5445/unittest"
+    username: "admin"
+    password: "admin"

@@ -1,0 +1,10 @@
+server.port: 8010
+spring:
+  datasource:
+    driver-class-name: "org.postgresql.Driver"
+    url: "jdbc:postgresql://localhost:5432/unittest"
+    username: "admin"
+    password: "admin"
+  flyway:
+    baselineOnMigrate: true
+    validate-on-migrate: false
