@@ -34,7 +34,7 @@ import static java.time.temporal.ChronoUnit.SECONDS;
 @Profile("test")
 @AutoConfigureBefore({DataSourceAutoConfiguration.class, XADataSourceAutoConfiguration.class,
         JdbcTemplateAutoConfiguration.class, HibernateJpaAutoConfiguration.class, FlywayAutoConfiguration.class})
-public class ContainerConfiguration extends FlywayAutoConfiguration.FlywayConfiguration {
+public class DatabaseInContainerConfiguration extends FlywayAutoConfiguration.FlywayConfiguration {
 
     @Bean
     public FixedHostPortGenericContainer postgresqlContainer(
