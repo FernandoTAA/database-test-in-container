@@ -2,12 +2,10 @@ package com.github.fernandotaa.databasetestincontainer.unittest;
 
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.callback.Callback;
-import org.flywaydb.core.api.configuration.FluentConfiguration;
 import org.flywaydb.core.api.migration.JavaMigration;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.boot.autoconfigure.flyway.FlywayConfigurationCustomizer;
 import org.springframework.boot.autoconfigure.flyway.FlywayDataSource;
@@ -17,36 +15,26 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.XADataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.testcontainers.containers.FixedHostPortGenericContainer;
 import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy;
 
 import javax.sql.DataSource;
 import java.net.URI;
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
 
 
 @Configuration
-@Conditional(ContainerConfiguration.Conditional.class)
+@Profile("test")
 @AutoConfigureBefore({DataSourceAutoConfiguration.class, XADataSourceAutoConfiguration.class,
         JdbcTemplateAutoConfiguration.class, HibernateJpaAutoConfiguration.class, FlywayAutoConfiguration.class})
 public class ContainerConfiguration extends FlywayAutoConfiguration.FlywayConfiguration {
-
-    public static class Conditional implements Condition {
-        @Override
-        public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-            return Arrays.asList(context.getEnvironment().getActiveProfiles()).contains("test");
-        }
-    }
 
     @Bean
     public FixedHostPortGenericContainer postgresqlContainer(
@@ -90,10 +78,6 @@ public class ContainerConfiguration extends FlywayAutoConfiguration.FlywayConfig
         public JdbcUrl(String url) {
             String cleanURI = url.substring(5);
             uri = URI.create(cleanURI);
-            System.out.println(uri.getScheme());
-            System.out.println(uri.getHost());
-            System.out.println(uri.getPort());
-            System.out.println(uri.getPath());
         }
 
         public String getDatabaseName() {
